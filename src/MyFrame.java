@@ -1,19 +1,21 @@
-import javax.swing.JButton;
+import java.awt.FlowLayout;
+
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 public class MyFrame extends JFrame {
-	
-	public MyFrame() {
-		super("Hello World");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		setResizable(false);
-		setSize(300, 100);
-		setLocation(500, 500);
-		add(new JButton("Przycisk 1"));
-		add(new JButton("Przycisk 2"));
-		add(new JButton("Przycisk 3"));
-		
+	public MyFrame() {
+		super("Rysowanie");
+		JPanel panel = new MyPanel();
+		JPanel pane2 = new MyPanel();
+		setLayout(new FlowLayout());
+
+		add(panel);
+		add(pane2);
+
+		pack();
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
 	}
 }
