@@ -125,8 +125,10 @@ public class MyPanel extends JPanel implements MouseListener, MouseMotionListene
 	
 	@Override
 	public void mousePressed(MouseEvent e) {
-		startDragging(e);
-		createNewRectangle(e);
+		if(e.getButton() == 1) {
+			createNewRectangle(e);
+			startDragging(e);
+		}
 	}
 
 	@Override
