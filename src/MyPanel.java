@@ -1,52 +1,73 @@
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
+import java.awt.Point;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.util.ArrayList;
+import java.util.List;
 
-import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
-public class MyPanel extends JPanel {
+public class MyPanel extends JPanel implements MouseListener{
 
-	private BufferedImage image; 
+	private static final int DEFAULT_WIDTH = 300;
+	private static final int DEFAULT_HEIGHT = 300;
 	
-	public MyPanel(File imageFile) {
-		super();
-		
-		try {
-			image = ImageIO.read(imageFile);
-		} catch (IOException e) {
-			System.err.println("Błąd wczytywania obrazka");
-			e.printStackTrace();
-		}
-		
-		Dimension dimesnion = new Dimension(image.getWidth(), image.getHeight());
-		setPreferredSize(dimesnion);
-	}
+	List<Point> points = new ArrayList<Point>();
 	
-	public MyPanel(URL imageUrl) {
+	public MyPanel() {
 		super();
-		
-		try {
-			image = ImageIO.read(imageUrl);
-		} catch (IOException e) {
-			System.err.println("Błąd wczytywania obrazka");
-			e.printStackTrace();
-		}
-		
-		Dimension dimesnion = new Dimension(image.getWidth(), image.getHeight());
-		setPreferredSize(dimesnion);
+		addMouseListener(this);
+		setPreferredSize(new Dimension(DEFAULT_WIDTH, DEFAULT_HEIGHT));
 	}
+
 
 
 	@Override
+	public void mousePressed(MouseEvent e) {
+		int x = e.getX();
+		int y = e.getY();
+		points.add(new Point(x, y));
+		repaint();
+	}
+	
+	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-
 		Graphics2D g2d = (Graphics2D) g;
-		g2d.drawImage(image, 0, 0, this);
+		g2d.setColor(Color.WHITE);
+		g2d.fillRect(0, 0, this.getWidth(), this.getHeight());
+		g2d.setColor(Color.BLACK);
+		drawRectangles(g2d);
 	}
+
+	private void drawRectangles(Graphics2D g2d) {
+		for(Point p : points) {
+			int x = (int) p.getX();
+			int y = (int) p.getY();
+			g2d.fillRect(x, y, 10, 10);
+	
+		}	
+	}
+
+
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+	}
+	
+	@Override
+	public void mouseReleased(MouseEvent e) {
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+	}
+
 }
