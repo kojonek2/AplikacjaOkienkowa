@@ -1,9 +1,9 @@
-import java.awt.EventQueue;
+import javax.swing.SwingUtilities;
 
 public class Test {
 
 	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
+		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
 				new MyFrame();

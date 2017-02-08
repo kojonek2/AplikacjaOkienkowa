@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 public class MyPanel extends JPanel implements MouseListener, MouseMotionListener {
 
@@ -22,7 +23,7 @@ public class MyPanel extends JPanel implements MouseListener, MouseMotionListene
 	private int draggingOffsetOfRectCornerX;
 	private int draggingOffsetOfRectCornerY;
 	private Point draggedRectangle;
-	
+
 	List<Point> points = new ArrayList<Point>();
 
 	public MyPanel() {
@@ -45,7 +46,7 @@ public class MyPanel extends JPanel implements MouseListener, MouseMotionListene
 	private void setIsDragged(boolean b) {
 		isDragged = b && draggedRectangle != null;
 	}
-	
+
 	private void drawRectangles(Graphics2D g2d) {
 		for (Point p : points) {
 			int x = (int) p.getX();
@@ -54,18 +55,16 @@ public class MyPanel extends JPanel implements MouseListener, MouseMotionListene
 		}
 	}
 
-	private void createNewRectangle(MouseEvent event) {
+	private boolean clickedOnRectangle(MouseEvent event) {
 		boolean clickedOnRectangle = false;
-		for(Point point : points) {
-			if(isRectangleClicked(point, event)) {
+		for (Point point : points) {
+			if (isRectangleClicked(point, event)) {
 				clickedOnRectangle = true;
 			}
 		}
-		if(!clickedOnRectangle) {
-			addRectangle(event);
-		}
+		return clickedOnRectangle;
 	}
-	
+
 	private void addRectangle(MouseEvent e) {
 		int x = e.getX() - RECT_WIDTH / 2;
 		int y = e.getY() - RECT_HEIGHT / 2;
@@ -80,25 +79,27 @@ public class MyPanel extends JPanel implements MouseListener, MouseMotionListene
 		}
 		return false;
 	}
-	
+
 	private void startDragging(MouseEvent event) {
-		if(points.size() == 0) return;
-		for(Point point : points) {
-			if(isRectangleClicked(point, event)) {
+		if (points.size() == 0)
+			return;
+		for (Point point : points) {
+			if (isRectangleClicked(point, event)) {
 				draggingOffsetOfRectCornerX = event.getX() - (int) point.getX();
 				draggingOffsetOfRectCornerY = event.getY() - (int) point.getY();
 				draggedRectangle = point;
 			}
 		}
 	}
-	
+
 	private void stopDragging(MouseEvent event) {
 		draggedRectangle = null;
 		setIsDragged(false);
 	}
-	
+
 	private void updateDraggedRectangle(MouseEvent event) {
-		if(draggedRectangle == null) return;
+		if (draggedRectangle == null)
+			return;
 		int newXOfRectCorner = event.getX() - draggingOffsetOfRectCornerX;
 		int newYOfRectCorner = event.getY() - draggingOffsetOfRectCornerY;
 		draggedRectangle.x = newXOfRectCorner;
@@ -118,16 +119,19 @@ public class MyPanel extends JPanel implements MouseListener, MouseMotionListene
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		if(e.getButton() == 3) {
+		if (e.getButton() == 3) {
 			removeRectangleForEvent(e);
 		}
 	}
-	
+
 	@Override
 	public void mousePressed(MouseEvent e) {
-		if(e.getButton() == 1) {
-			createNewRectangle(e);
-			startDragging(e);
+		if (e.getButton() == 1) {
+			if (clickedOnRectangle(e)) {
+				startDragging(e);
+			} else {
+				addRectangle(e);
+			}
 		}
 	}
 
@@ -147,7 +151,7 @@ public class MyPanel extends JPanel implements MouseListener, MouseMotionListene
 	@Override
 	public void mouseDragged(MouseEvent e) {
 		setIsDragged(true);
-		updateDraggedRectangle(e); 
+		updateDraggedRectangle(e);
 	}
 
 	@Override
