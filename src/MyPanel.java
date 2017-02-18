@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 
+@SuppressWarnings("serial")
 public class MyPanel extends JPanel implements MouseListener, MouseMotionListener {
 
 	private static final int DEFAULT_WIDTH = 300;
@@ -19,7 +19,6 @@ public class MyPanel extends JPanel implements MouseListener, MouseMotionListene
 	private static final int RECT_WIDTH = 10;
 	private static final int RECT_HEIGHT = 10;
 
-	private boolean isDragged = false;
 	private int draggingOffsetOfRectCornerX;
 	private int draggingOffsetOfRectCornerY;
 	private Point draggedRectangle;
@@ -41,10 +40,6 @@ public class MyPanel extends JPanel implements MouseListener, MouseMotionListene
 		g2d.fillRect(0, 0, this.getWidth(), this.getHeight());
 		g2d.setColor(Color.BLACK);
 		drawRectangles(g2d);
-	}
-
-	private void setIsDragged(boolean b) {
-		isDragged = b && draggedRectangle != null;
 	}
 
 	private void drawRectangles(Graphics2D g2d) {
@@ -94,7 +89,6 @@ public class MyPanel extends JPanel implements MouseListener, MouseMotionListene
 
 	private void stopDragging(MouseEvent event) {
 		draggedRectangle = null;
-		setIsDragged(false);
 	}
 
 	private void updateDraggedRectangle(MouseEvent event) {
@@ -150,7 +144,6 @@ public class MyPanel extends JPanel implements MouseListener, MouseMotionListene
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
-		setIsDragged(true);
 		updateDraggedRectangle(e);
 	}
 
